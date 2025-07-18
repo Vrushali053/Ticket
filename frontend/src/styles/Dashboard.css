@@ -1,0 +1,131 @@
+/* Dashboard.css */
+
+.dashboard-container {
+  width: 100%;
+  padding: 20px;
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+  background-color: #f9fbff;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #222;
+  text-align: center;
+}
+
+/* --- Cards Section --- */
+.dashboard-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.card {
+  background-color: #ffffff;
+  border: 1px solid #dce6f1;
+  border-radius: 10px;
+  padding: 15px 20px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  flex: 1 1 250px;
+  max-width: 300px;
+}
+
+.card h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+  color: #0077cc;
+}
+
+.card p {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* --- Chart Section --- */
+.chart-section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.chart-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  flex: 1 1 300px;
+  max-width: 600px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.chart-card h3 {
+  font-size: 18px;
+  margin-bottom: 15px;
+  text-align: center;
+  color: #444;
+}
+
+/* ✅ Make charts responsive */
+.chart-card canvas {
+  width: 100% !important;
+  height: auto !important;
+  max-width: 100%;
+  display: block;
+}
+
+/* --- Mobile Responsive --- */
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 15px;
+  }
+
+  .card {
+    max-width: 100%;
+  }
+
+  .chart-card {
+    padding: 15px;
+    max-width: 100%;
+  }
+
+  h2 {
+    font-size: 22px;
+  }
+
+  .card h3,
+  .chart-card h3 {
+    font-size: 16px;
+  }
+
+  .card p {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-container {
+    padding: 10px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  .card h3,
+  .chart-card h3 {
+    font-size: 15px;
+  }
+
+  .card p {
+    font-size: 13px;
+  }
+}

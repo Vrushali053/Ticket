@@ -1,0 +1,107 @@
+/* TopNav.css */
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  padding: 10px 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.left-section h3 {
+  margin: 0;
+  font-size: 22px;
+  color: #333;
+}
+
+.right-section {
+  display: flex;
+  align-items: center;
+}
+
+.get-btn,
+.new-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 5px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.get-btn:hover,
+.new-btn:hover {
+  background-color: #0056b3;
+}
+
+.top-icon {
+  margin-right: 12px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* Dropdown styles */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  min-width: 160px;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.dropdown-menu a,
+.dropdown-menu p {
+  padding: 10px 16px;
+  display: block;
+  color: #333;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.dropdown-menu a:hover,
+.dropdown-menu p:hover {
+  background-color: #f0f0f0;
+}
+
+@media (max-width: 768px) {
+  .top-nav {
+    flex-wrap: wrap;
+    padding: 10px;
+  }
+
+  .left-section h3 {
+    font-size: 18px;
+  }
+
+  .get-btn,
+  .new-btn {
+    padding: 6px 10px;
+    font-size: 14px;
+    margin-right: 6px;
+  }
+
+  .top-icon {
+    font-size: 16px;
+    margin-right: 8px;
+  }
+
+  .dropdown-menu {
+    right: 0;
+    min-width: 140px;
+  }
+
+  .dropdown-menu a,
+  .dropdown-menu p {
+    padding: 8px 12px;
+  }
+}

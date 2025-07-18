@@ -1,0 +1,95 @@
+/* Container Styling */
+.ticket-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+}
+
+/* Table Wrapper for horizontal scroll on small screens */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+/* Main Table Styling */
+.ticket-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Table Header */
+.ticket-table thead {
+  background-color: #007bff;
+  color: white;
+}
+
+.ticket-table th,
+.ticket-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Update Form Controls */
+.update-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.update-controls select,
+.update-controls input {
+  padding: 6px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.update-controls button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.update-controls button:hover {
+  background-color: #218838;
+}
+
+/* Responsive Design for Small Screens */
+@media (max-width: 768px) {
+  .ticket-table th,
+  .ticket-table td {
+    font-size: 14px;
+    padding: 8px 10px;
+  }
+
+  .update-controls {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 500px) {
+  .ticket-container {
+    padding: 10px;
+  }
+
+  .ticket-table th,
+  .ticket-table td {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .update-controls select,
+  .update-controls input,
+  .update-controls button {
+    font-size: 12px;
+    padding: 6px;
+  }
+}
