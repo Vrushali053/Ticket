@@ -4,37 +4,69 @@ import '../styles/Tickets.css';
 
 function Tickets() {
   const [tickets, setTickets] = useState([]);
-  const [updateData, setUpdateData] = useState({});
-  const [comments, setComments] = useState({});
-  const [newComment, setNewComment] = useState({});
-  const [feedback, setFeedback] = useState({});
-  const [newFeedback, setNewFeedback] = useState({});
+  const [editMode, setEditMode] = useState({});
+  const [editData, setEditData] = useState({});
+  const [assignableUsers, setAssignableUsers] = useState([]); // includes both agents & users
 
   useEffect(() => {
     fetchTickets();
+    fetchAssignableUsers();
   }, []);
+  
 
   const fetchTickets = () => {
     axios.get('http://localhost:5000/api/tickets')
       .then(res => setTickets(res.data))
-      .catch(err => console.log(err));
+      .catch(err => console.error(err));
+  };
+
+  const fetchAssignableUsers = () => {
+    axios.get('http://localhost:5000/api/users/assignable')
+      .then(res => setAssignableUsers(res.data))
+      .catch(err => console.error(err));
+  };
+
+  const handleEditClick = (ticket) => {
+    setEditMode((prev) => ({ ...prev, [ticket._id]: true }));
+    setEditData((prev) => ({
+      ...prev,
+      [ticket._id]: {
+        title: ticket.title,
+        userName: ticket.userName,
+        email: ticket.email,
+        status: ticket.status || '',
+        priority: ticket.priority || '',
+        category: ticket.category || '',
+        assignee: ticket.assignee?._id || ''
+      }
+    }));
   };
 
   const handleChange = (e, id) => {
     const { name, value } = e.target;
-    setUpdateData(prev => ({
+    setEditData((prev) => ({
       ...prev,
-      [id]: { ...(prev[id] || {}), [name]: value }
+      [id]: { ...prev[id], [name]: value }
     }));
   };
 
-  const handleUpdate = (id) => {
-    axios.put(`http://localhost:5000/api/tickets/update/${id}`, updateData[id])
+  const handleSave = (id) => {
+    const payload = { ...editData[id] };
+
+    if (payload.assignee === '') {
+      payload.assignee = null;
+    }
+
+    axios.put(`http://localhost:5000/api/tickets/update/${id}`, payload)
       .then(() => {
-        alert("Ticket updated!");
+        alert("✅ Ticket updated!");
         fetchTickets();
+        setEditMode((prev) => ({ ...prev, [id]: false }));
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        console.error(err);
+        alert("❌ Error updating ticket.");
+      });
   };
 
   return (
@@ -45,56 +77,129 @@ function Tickets() {
           <thead>
             <tr>
               <th>Title</th>
-              <th>Name</th>
+              <th>User</th>
               <th>Email</th>
               <th>Status</th>
               <th>Priority</th>
               <th>Category</th>
               <th>Assignee</th>
-              <th>Update</th>
+              <th>Edit</th>
             </tr>
           </thead>
           <tbody>
             {tickets.map(ticket => (
               <tr key={ticket._id}>
-                <td>{ticket.title}</td>
-                <td>{ticket.userName}</td>
-                <td>{ticket.email}</td>
-                <td>{ticket.status}</td>
-                <td>{ticket.priority}</td>
-                <td>{ticket.category}</td>
-                <td>{ticket.assignee}</td>
                 <td>
-                  <div className="update-controls">
-                    <select name="status" onChange={(e) => handleChange(e, ticket._id)} defaultValue="">
-                      <option value="" disabled>Status</option>
+                  {editMode[ticket._id] ? (
+                    <input
+                      type="text"
+                      name="title"
+                      value={editData[ticket._id]?.title || ''}
+                      onChange={(e) => handleChange(e, ticket._id)}
+                    />
+                  ) : (
+                    ticket.title
+                  )}
+                </td>
+                <td>
+                  {editMode[ticket._id] ? (
+                    <input
+                      type="text"
+                      name="userName"
+                      value={editData[ticket._id]?.userName || ''}
+                      onChange={(e) => handleChange(e, ticket._id)}
+                    />
+                  ) : (
+                    ticket.userName
+                  )}
+                </td>
+                <td>
+                  {editMode[ticket._id] ? (
+                    <input
+                      type="email"
+                      name="email"
+                      value={editData[ticket._id]?.email || ''}
+                      onChange={(e) => handleChange(e, ticket._id)}
+                    />
+                  ) : (
+                    ticket.email
+                  )}
+                </td>
+                <td>
+                  {editMode[ticket._id] ? (
+                    <select
+                      name="status"
+                      value={editData[ticket._id]?.status}
+                      onChange={(e) => handleChange(e, ticket._id)}
+                    >
+                      <option value="">Select</option>
                       <option value="New">New</option>
                       <option value="Open">Open</option>
                       <option value="Resolved">Resolved</option>
                       <option value="Closed">Closed</option>
                     </select>
-                    <select name="priority" onChange={(e) => handleChange(e, ticket._id)} defaultValue="">
-                      <option value="" disabled>Priority</option>
+                  ) : (
+                    ticket.status || '—'
+                  )}
+                </td>
+                <td>
+                  {editMode[ticket._id] ? (
+                    <select
+                      name="priority"
+                      value={editData[ticket._id]?.priority}
+                      onChange={(e) => handleChange(e, ticket._id)}
+                    >
+                      <option value="">Select</option>
                       <option value="Low">Low</option>
                       <option value="Medium">Medium</option>
                       <option value="High">High</option>
                       <option value="Urgent">Urgent</option>
                     </select>
-                    <select name="category" onChange={(e) => handleChange(e, ticket._id)} defaultValue="">
-                      <option value="" disabled>Category</option>
+                  ) : (
+                    ticket.priority || '—'
+                  )}
+                </td>
+                <td>
+                  {editMode[ticket._id] ? (
+                    <select
+                      name="category"
+                      value={editData[ticket._id]?.category}
+                      onChange={(e) => handleChange(e, ticket._id)}
+                    >
+                      <option value="">Select</option>
                       <option value="General">General</option>
                       <option value="Technical">Technical</option>
                       <option value="Billing">Billing</option>
                       <option value="Hardware">Hardware</option>
                     </select>
-                    <input
-                      type="text"
+                  ) : (
+                    ticket.category || '—'
+                  )}
+                </td>
+                <td>
+                  {editMode[ticket._id] ? (
+                    <select
                       name="assignee"
-                      placeholder="Assignee"
+                      value={editData[ticket._id]?.assignee || ''}
                       onChange={(e) => handleChange(e, ticket._id)}
-                    />
-                    <button onClick={() => handleUpdate(ticket._id)}>Update</button>
-                  </div>
+                    >
+                      <option value="">Select Assign</option>
+                      {assignableUsers.map((user) => (
+                        <option key={user._id} value={user._id}>
+                          {user.name} ({user.role})
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    ticket.assignee?.name || 'Unassigned'
+                  )}
+                </td>
+                <td>
+                  {editMode[ticket._id] ? (
+                    <button onClick={() => handleSave(ticket._id)}>Save</button>
+                  ) : (
+                    <button onClick={() => handleEditClick(ticket)}>Edit</button>
+                  )}
                 </td>
               </tr>
             ))}

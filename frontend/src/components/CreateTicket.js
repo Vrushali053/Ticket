@@ -1,128 +1,78 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/CreateTicket.css';
 
 function CreateTicket() {
-  const [ticket, setTicket] = useState({
+  const [form, setForm] = useState({
     userName: '',
     email: '',
     title: '',
     description: '',
     category: '',
     priority: '',
-    status: 'Open',
-    attachment: null
+    assignee: ''
   });
+
+  const [agents, setAgents] = useState([]);
+
+  useEffect(() => {
+    const fetchAgents = async () => {
+      try {
+        const res = await axios.get('http://localhost:5000/api/agents');
+        setAgents(res.data);
+      } catch (err) {
+        console.error('Failed to fetch agents:', err);
+      }
+    };
+    fetchAgents();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setTicket((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleFileChange = (e) => {
-    setTicket((prev) => ({ ...prev, attachment: e.target.files[0] }));
+    setForm(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const formData = new FormData();
-      for (const key in ticket) {
-        formData.append(key, ticket[key]);
-      }
-
-      await axios.post('http://localhost:5000/api/tickets', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
-
-      alert('Ticket Submitted!');
-      setTicket({
-        userName: '',
-        email: '',
-        title: '',
-        description: '',
-        category: '',
-        priority: '',
-        status: 'Open',
-        attachment: null
-      });
-      document.getElementById('fileInput').value = null;
-    } catch (error) {
-      console.error('Error submitting ticket:', error);
-      alert('Failed to submit ticket.');
+      const res = await axios.post('http://localhost:5000/api/tickets', form);
+      alert(`Ticket created successfully and assigned to ${res.data.assignee?.name || "No agent available"}`);
+    } catch (err) {
+      alert("Error: " + err.response?.data?.error);
     }
   };
 
   return (
     <div className="create-ticket-container">
-      <h2>Create Helpdesk Ticket</h2>
-      <form onSubmit={handleSubmit} className="ticket-form">
-        <input
-          name="userName"
-          value={ticket.userName}
-          onChange={handleChange}
-          placeholder="Full Name"
-          required
-        />
+      <h2>Submit a Ticket</h2>
+      <form onSubmit={handleSubmit}>
+        <input name="userName" onChange={handleChange} placeholder="Your Name" required />
+        <input name="email" type="email" onChange={handleChange} placeholder="Email" required />
+        <input name="title" onChange={handleChange} placeholder="Issue Title" required />
+        <textarea name="description" onChange={handleChange} placeholder="Describe the issue" required />
 
-        <input
-          name="email"
-          type="email"
-          value={ticket.email}
-          onChange={handleChange}
-          placeholder="Email Address"
-          required
-        />
-
-        <input
-          name="title"
-          value={ticket.title}
-          onChange={handleChange}
-          placeholder="Issue Title"
-          required
-        />
-
-        <textarea
-          name="description"
-          value={ticket.description}
-          onChange={handleChange}
-          placeholder="Describe your issue..."
-          rows="4"
-          required
-        />
-
-        <select
-          name="category"
-          value={ticket.category}
-          onChange={handleChange}
-          required
-        >
-          <option value="" disabled>Select Category</option>
+        <select name="category" onChange={handleChange} required>
+          <option value="">Select Category</option>
+          <option value="General">General</option>
           <option value="Technical">Technical</option>
           <option value="Billing">Billing</option>
-          <option value="General">General</option>
-          <option value="Hardware">Hardware</option>
         </select>
 
-        <select
-          name="priority"
-          value={ticket.priority}
-          onChange={handleChange}
-          required
-        >
-          <option value="" disabled>Priority</option>
+        <select name="priority" onChange={handleChange} required>
+          <option value="">Select Priority</option>
           <option value="Low">Low</option>
           <option value="Medium">Medium</option>
           <option value="High">High</option>
-          <option value="Urgent">Urgent</option>
         </select>
 
-        <input
-          id="fileInput"
-          type="file"
-          accept=".png,.jpg,.jpeg,.pdf,.docx"
-          onChange={handleFileChange}
-        />
+        <select name="assignee" onChange={handleChange} required>
+          <option value="">Select Assignee</option>
+          {agents.map((agent) => (
+            <option key={agent._id} value={agent._id}>
+              {agent.name} ({agent.email})
+            </option>
+          ))}
+        </select>
 
         <button type="submit">Submit Ticket</button>
       </form>

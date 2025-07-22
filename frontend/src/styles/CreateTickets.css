@@ -1,0 +1,82 @@
+/* Container for the form */
+.ticket-form-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 25px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Heading */
+.ticket-form-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #3f51b5;
+  font-size: 24px;
+}
+
+/* Form layout */
+.ticket-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Labels */
+.ticket-form label {
+  font-weight: 600;
+  color: #333;
+}
+
+/* Inputs, Select, and Textarea */
+.ticket-form input,
+.ticket-form textarea,
+.ticket-form select {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.ticket-form input:focus,
+.ticket-form textarea:focus,
+.ticket-form select:focus {
+  border-color: #3f51b5;
+}
+
+/* Submit Button */
+.ticket-form button {
+  padding: 12px;
+  font-size: 16px;
+  background-color: #3f51b5;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.ticket-form button:hover {
+  background-color: #303f9f;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .ticket-form-container {
+    margin: 20px 10px;
+    padding: 20px;
+  }
+
+  .ticket-form input,
+  .ticket-form textarea,
+  .ticket-form select {
+    font-size: 14px;
+  }
+
+  .ticket-form button {
+    font-size: 15px;
+  }
+}

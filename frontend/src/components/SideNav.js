@@ -84,9 +84,9 @@ function SideNav() {
       <Link to="/status-update">
         <FaClipboardCheck className="nav-icon" title="Status Update" />
       </Link>
-      {/* <Link to="/user-login">
+      <Link to="/user-login">
         <FaUser className="nav-icon" title="User Login" />
-      </Link> */}
+      </Link>
       <Link to="/settings">
         <FaCog className="nav-icon" title="Settings" />
       </Link>

@@ -1,14 +1,11 @@
+// Login.js (updated)
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import '../styles/UserRegister.css';
 
 function Login() {
-  const [form, setForm] = useState({
-    email: '',
-    password: ''
-  });
-
+  const [form, setForm] = useState({ email: '', password: '' });
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -31,6 +28,7 @@ function Login() {
       }
 
       localStorage.setItem('currentUser', JSON.stringify({
+        userId: foundUser._id,
         name: foundUser.name,
         email: foundUser.email,
         role: foundUser.role
