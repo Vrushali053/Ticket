@@ -6,13 +6,12 @@ function Tickets() {
   const [tickets, setTickets] = useState([]);
   const [editMode, setEditMode] = useState({});
   const [editData, setEditData] = useState({});
-  const [assignableUsers, setAssignableUsers] = useState([]); // includes both agents & users
+  const [assignableUsers, setAssignableUsers] = useState([]);
 
   useEffect(() => {
     fetchTickets();
     fetchAssignableUsers();
   }, []);
-  
 
   const fetchTickets = () => {
     axios.get('http://localhost:5000/api/tickets')
@@ -183,12 +182,25 @@ function Tickets() {
                       value={editData[ticket._id]?.assignee || ''}
                       onChange={(e) => handleChange(e, ticket._id)}
                     >
-                      <option value="">Select Assign</option>
-                      {assignableUsers.map((user) => (
-                        <option key={user._id} value={user._id}>
-                          {user.name} ({user.role})
-                        </option>
-                      ))}
+                      <option value="">Select Assignee</option>
+                      <optgroup label="Agents">
+                        {assignableUsers
+                          .filter(user => user.role === 'agent')
+                          .map(user => (
+                            <option key={user._id} value={user._id}>
+                              {user.name}
+                            </option>
+                          ))}
+                      </optgroup>
+                      <optgroup label="Users">
+                        {assignableUsers
+                          .filter(user => user.role === 'user')
+                          .map(user => (
+                            <option key={user._id} value={user._id}>
+                              {user.name}
+                            </option>
+                          ))}
+                      </optgroup>
                     </select>
                   ) : (
                     ticket.assignee?.name || 'Unassigned'
